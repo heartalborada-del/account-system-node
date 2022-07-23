@@ -13,7 +13,7 @@ $('form.loginForm')
         })
         if (!/^[A-Za-z0-9]{4}$/.test(json.captcha)) {
             halfmoon.initStickyAlert({
-                content: 'Verifying captcha errors. Are you input right captcha ?',//不会写（
+                content: 'Verifying captcha errors. Are you input right captcha?',//不会写（
                 title: 'ERROR',
                 alertType: "alert-danger",
                 fillType: "filled"
@@ -29,9 +29,16 @@ $('form.loginForm')
                 alertType: "alert-danger",
                 fillType: "filled"
             });
-        } else if (!/^(?=.*[a-zA-Z])(?=.*[0-9])[\x00-\xff][^:;'",\s]{8,20}$/.test(json.password)) {
+        } else if (!/^(?=.*[a-zA-Z])(?=.*[0-9])[A-Za-z0-9]{8,18}$/.test(json.password)) {
             halfmoon.initStickyAlert({
                 content: 'Are you input right password?',//不会写（
+                title: 'ERROR',
+                alertType: "alert-danger",
+                fillType: "filled"
+            });
+        }else if (json.password !== json.password_again){
+            halfmoon.initStickyAlert({
+                content: 'Please re-enter the same password',//不会写（
                 title: 'ERROR',
                 alertType: "alert-danger",
                 fillType: "filled"
@@ -41,7 +48,7 @@ $('form.loginForm')
                 let en = new JSEncrypt();
                 en.setPublicKey(data.key);
                 let enpw = en.encrypt(json.password);
-                $.post('/api/acc/login', {...json, password: enpw}, function (data) {
+                $.post('/api/acc/register', {email: json.email, password: enpw, captcha: json.captcha}, function (data) {
                     if (data.code !== 0) {
                         halfmoon.initStickyAlert({
                             content: data.msg,//不会写（
@@ -55,7 +62,7 @@ $('form.loginForm')
                         a.src = url;
                     } else {
                         halfmoon.initStickyAlert({
-                            content: "Login Success",
+                            content: "Register Success",
                             title: "Success",
                             alertType: "alert-success",
                             fillType: "filled-lm"
