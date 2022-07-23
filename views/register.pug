@@ -1,0 +1,33 @@
+extends layout
+
+block content
+    div.w-400.mw-full.mid
+        div.card.p-0
+            div.px-card.py-10.border-bottom
+                h2.card-title.font-size-18.m-0 Register
+            div.content
+                form
+                    div.form-group.input-group
+                        div.input-group-prepend
+                            span.input-group-text
+                                i.fa.fa-envelope-o(aria-hidden=true)
+                        input.form-control(type='email', placeholder='Your email' required='required')
+                    div.form-group.input-group
+                        div.input-group-prepend
+                            span.input-group-text
+                                i.fa.fa-key(aria-hidden=true)
+                        input.form-control(type='password', placeholder='Your password', required='required')
+                    div.form-group.input-group
+                        div.input-group-prepend
+                            span.input-group-text
+                                i.fa.fa-key(aria-hidden=true)
+                        input.form-control(type='password', placeholder='Re enter your password', required='required')
+                    div.form-group.input-group
+                        div.input-group-prepend
+                            span.input-group-text
+                                i.fa.fa-lock(aria-hidden=true)
+                        input.form-control(type='text', placeholder='Captcha', required='required')
+                        div.input-group-prepend
+                            img.captcha(src='/api/captcha', height=30)
+                    input.btn.btn-primary.btn-block(type="submit", value='register')
+    script(type="text/javascript", src='/js/login.js')
