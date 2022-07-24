@@ -9,7 +9,7 @@ router.get('/', function (req, res, next) {
         noise: 4,
         color: true,
         height: '30',
-        width: '100',
+        width: '150',
         background: '#fff'
     })
     req.session.captcha = c.text.toLowerCase();

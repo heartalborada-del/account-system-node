@@ -3,19 +3,29 @@ const router = express.Router();
 const accRouter = require('./api/account');
 const captchaRouter = require('./api/captcha');
 const {expressjwt} = require('express-jwt');
+const url = require("url");
 const keys = require("../utils/init").keys;
-
-router.use('/acc', accRouter);
-
-router.use('/captcha', captchaRouter);
 
 router.use(expressjwt({
     secret: keys.priKey,
     algorithms: ['RS256'],
-    credentialsRequired: true
+    credentialsRequired: true,
+    issuer: url.resolve(process.env.SITE_URL,'/'),
+    getToken: function (req) {
+        if (req.headers.authorization && req.headers.authorization.split(" ")[0] === "Bearer") {
+            return req.headers.authorization.split(" ")[1];
+        } else if (req.cookies && req.cookies.ltoken) {
+            return req.cookies.ltoken;
+        }
+        return null;
+    }
 }).unless({
-    path: ['/captcha', '/acc/login', '/acc/getPubKey']
+    path: ['/api/captcha', '/api/acc/login', '/api/acc/getPubKey', '/api/acc/register']
 }));
+
+router.use('/acc', accRouter);
+
+router.use('/captcha', captchaRouter);
 
 router.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {

@@ -61,6 +61,7 @@ $('form.loginForm')
                             fillType: "filled-lm"
                         });
                         localStorage.setItem("loginToken", data.token);
+                        window.location.href='/my';
                     }
                 })
             })

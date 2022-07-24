@@ -3,26 +3,26 @@ const router = express.Router();
 const {expressjwt} = require("express-jwt");
 const {keys} = require("../utils/init");
 const {users} = require('../utils/sql');
+const url = require("url");
+const jwt = require("../utils/jwt");
 
-const siteName = 'TEST';
+const siteName = process.env.SITE_NAME;
 
 router.use(expressjwt({
     secret: keys.priKey,
     algorithms: ['RS256'],
     credentialsRequired: false,
-    //issuer: process.env.SITE_URL,
+    issuer: url.resolve(process.env.SITE_URL, '/'),
     getToken: function (req) {
         if (req.headers.authorization && req.headers.authorization.split(" ")[0] === "Bearer") {
             return req.headers.authorization.split(" ")[1];
-        } else if (req.query && req.query.token) {
-            return req.query.token;
         } else if (req.cookies && req.cookies.ltoken) {
             return req.cookies.ltoken;
         }
         return null;
     }
 }).unless({
-    path: ['/','/login','/register']
+    path: ['/', '/login', '/register']
 }));
 
 router.get('/', function (req, res, next) {
@@ -37,15 +37,28 @@ router.get('/register', function (req, res, next) {
     res.render('account/register', {title: siteName});
 })
 
-router.get('/my', function (req, res, next){
-    if(req.auth && req.auth.uuid){
-        users.findOne({where:{UUID: req.auth.uuid}})
-            .then(function (user){
-                res.render('account/my', {
-                    title: siteName,
-                    UUID: req.auth.uuid,
-                    email: user.email
-                });
+router.get('/my', function (req, res, next) {
+    if (req.auth && req.auth.uuid) {
+        users.findOne({where: {UUID: req.auth.uuid}})
+            .then(function (user) {
+                if (user != null) {
+                    res.render('account/my', {
+                        title: siteName,
+                        UUID: req.auth.uuid,
+                        email: user.email,
+                        verify: user.email_verify
+                    });
+                } else {
+                    let option = {
+                        name: 'Login',
+                        url: '/login',
+                        time: 5,
+                        message: 'You aren\'t login or register'
+                    }
+                    res.cookie('ltoken', '', {maxAge: 0})
+                        .cookie('etoken', '', {maxAge: 0})
+                        .render('jump', option);
+                }
             })
     } else {
         let option = {

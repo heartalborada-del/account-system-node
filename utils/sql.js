@@ -23,12 +23,12 @@ const users = cp.define('User',
         UUID: {
             type: DataTypes.UUID,
             allowNull: false,
-            unique: true
+            unique: "account"
         },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            primaryKey: true
+            primaryKey: true,
         },
         password: {
             type: DataTypes.STRING,
@@ -40,10 +40,18 @@ const users = cp.define('User',
         }
     },
     {
-        tableName: process.env.DB_PERFIX + 'Users'
+        tableName: process.env.DB_PERFIX + 'Users',
+        indexes: [
+            {
+                unique: true,
+                fields: ['email','UUID']
+            }
+        ]
     }
 )
 
-cp.sync({alter: true});
+cp.sync({
+    alter: true
+});
 
 module.exports = {cp,users};

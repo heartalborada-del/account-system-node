@@ -6,9 +6,21 @@ block content
             div.px-card.border-bottom.py-10
                 h2.card-title.font-size-18.m-0 Welcome
             div.content
-                p 欢迎回来, UUID为
-                    code.code #{UUID}
-                    | 的用户
-                p 你的邮箱为
-                    code.code #{email}
-
+                div
+                    p 欢迎回来, UUID为
+                        code.code #{UUID}
+                        | 的用户
+                    p 你的邮箱为
+                        code.code #{email}
+                        | 目前邮箱验证状态为
+                        if verify
+                            code.code Verified
+                        else
+                            code.code Unverified
+                if !verify
+                    div.border-top
+                        p 没有收到邮件? 点击按钮重新发送邮件
+                            button.btn.btn-secondary(id='reSendEmail', style="margin-left: 10px") 重新发送邮件
+                            script(type="text/javascript", src='/js/verifyEmail.js')
+                            script(type="text/javascript")
+                                | let uuid='#{UUID}'
