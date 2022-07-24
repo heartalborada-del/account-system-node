@@ -40,7 +40,10 @@ router.post('/login', function (req, res, next) {
                         msg: 'Cannot found this user, are you register?',
                     });
                 } else {
-                    let pw = crypto.privateDecrypt({key: priKey, padding: crypto.constants.RSA_PKCS1_PADDING}, Buffer.from(req.body.password, 'base64'));
+                    let pw = crypto.privateDecrypt({
+                        key: priKey,
+                        padding: crypto.constants.RSA_PKCS1_PADDING
+                    }, Buffer.from(req.body.password, 'base64'));
                     let en = hmac.update(pw).digest('hex');
                     if (user.password !== en || !reg[1].test(pw.toString())) {
                         res.json({
@@ -48,10 +51,12 @@ router.post('/login', function (req, res, next) {
                             msg: 'You enter a wrong password,please check your password',
                         });
                     } else {
-                        res.json({
+                        console.log(user.UUID)
+                        let token = jwt.genToken({'uuid': user.UUID});
+                        res.cookie('ltoken', token, {maxAge: 12 * 3600 * 1000}).json({
                             code: 0,
                             msg: 'ok',
-                            token: jwt.genToken({wd: 'nmd'})
+                            token: token
                         });
                     }
                 }
@@ -76,7 +81,10 @@ router.post('/register', function (req, res, next) {
         res.end();
     }
     if (inputCaptcha === req.session.captcha) {
-        let pw = crypto.privateDecrypt({key: priKey, padding: crypto.constants.RSA_PKCS1_PADDING}, Buffer.from(req.body.password, 'base64'));
+        let pw = crypto.privateDecrypt({
+            key: priKey,
+            padding: crypto.constants.RSA_PKCS1_PADDING
+        }, Buffer.from(req.body.password, 'base64'));
         let en = hmac.update(pw).digest('hex');
         if (!reg[1].test(pw.toString())) {
             res.json({
@@ -84,16 +92,28 @@ router.post('/register', function (req, res, next) {
                 msg: 'You enter a wrong password,please check your password',
             })
         } else {
-            users.build({
-                UUID: uuid(),
-                email,
-                password: en
-            }).save().then(function (){
-                res.json({
-                    code: 0,
-                    msg: 'ok',
-                    token: jwt.genToken({wd: 'nmd'})
-                });
+            users.findOne({where: {email}}).then(function (user) {
+                if (user === undefined) {
+                    let U = uuid();
+                    users.build({
+                        UUID: U,
+                        email,
+                        password: en
+                    }).save().then(function () {
+                        let token = jwt.genToken({uuid: U});
+                        res.json({
+                            code: 0,
+                            msg: 'ok',
+                            token
+                        });
+                        req.cookie('ltoken', token, {maxAge: 12 * 3600 * 1000});
+                    });
+                } else {
+                    res.json({
+                        code: -101,
+                        msg: 'This email has already use, please use other emails',
+                    })
+                }
             });
         }
     } else {

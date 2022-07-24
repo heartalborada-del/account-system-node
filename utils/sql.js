@@ -33,6 +33,10 @@ const users = cp.define('User',
         password: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        email_verify: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
         }
     },
     {
@@ -40,6 +44,6 @@ const users = cp.define('User',
     }
 )
 
-cp.sync();
+cp.sync({alter: true});
 
 module.exports = {cp,users};

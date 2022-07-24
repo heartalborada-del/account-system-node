@@ -15,20 +15,17 @@ html
             div.sidebar-overlay(onclick="halfmoon.toggleSidebar()")
             nav.navbar
                 div.navbar-content
-                    button.btn.btn-action(type="button", onclick="halfmoon.toggleSidebar()",
-                        data-toggle='tooltip', data-title='Toggle sidebar', data-placement='right')
+                    button.btn.btn-action(type="button", onclick="halfmoon.toggleSidebar()")
                         i.fa.fa-bars(aria-hidden=true)
                         span.sr-only Toggle sidebar
                 a.navbar-brand TEST
                 span.navbar-text.text-monospace.badge v0.0.1
                 div.navbar-content.ml-auto
-                    button.btn.btn-action(type="button", onclick='halfmoon.toggleDarkMode()',
-                        data-toggle='tooltip', data-title='Toggle dark mode', data-placement='left')
+                    button.btn.btn-action(type="button", onclick='halfmoon.toggleDarkMode()')
                         i.fa.fa-moon-o(aria-hidden=true)
                         span.sr-only Toggle dark mode
             div.sidebar
-                div.sidebar-menu
-                a.sidebar-link.sidebar-link-with-icon(href='/', id='index')
+                a.sidebar-link.sidebar-link-with-icon(href='/')
                     span.sidebar-icon
                         i.fa.fa-home
                     | Index
@@ -37,8 +34,9 @@ html
                         i.fa.fa-sign-in
                     | Account
                 div.sidebar-divider
-                    a.sidebar-link(id='login', href='/login') Login
-                    a.sidebar-link(id='reg', href='/register') Register
+                    a.sidebar-link(href='/login') Login
+                    a.sidebar-link(href='/register') Register
+                    a.sidebar-link(href='/my') My
             div.content-wrapper
                 div.container-fluid
                     div.content

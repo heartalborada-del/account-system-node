@@ -4,9 +4,14 @@ const jwt = require('jsonwebtoken');
 function genToken(payload) {
     return jwt.sign(payload, keys.priKey, {
         algorithm: "RS256",
-        expiresIn: '24h',
-        issuer: process.env.SITE_URL
+        expiresIn: '12h',
+        //issuer: process.env.SITE_URL
     })
 }
 
-module.exports = {genToken}
+function checkToken(token) {
+    return jwt.verify(token, keys.pubKey, {
+        issuer: process.env.SITE_URL
+    })
+}
+module.exports = {genToken, checkToken}
