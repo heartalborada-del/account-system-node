@@ -4,7 +4,6 @@ const {expressjwt} = require("express-jwt");
 const {keys} = require("../utils/init");
 const {users} = require('../utils/sql');
 const url = require("url");
-const jwt = require("../utils/jwt");
 
 const siteName = process.env.SITE_NAME;
 
@@ -25,19 +24,19 @@ router.use(expressjwt({
     path: ['/', '/login', '/register']
 }));
 
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
     res.render('index', {title: siteName});
 });
 
-router.get('/login', function (req, res, next) {
+router.get('/login', function (req, res) {
     res.render('account/login', {title: siteName});
 })
 
-router.get('/register', function (req, res, next) {
+router.get('/register', function (req, res) {
     res.render('account/register', {title: siteName});
 })
 
-router.get('/my', function (req, res, next) {
+router.get('/my', function (req, res) {
     if (req.auth && req.auth.uuid) {
         users.findOne({where: {UUID: req.auth.uuid}})
             .then(function (user) {

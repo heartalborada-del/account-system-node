@@ -17,7 +17,7 @@ const reg = [
     /^(?=.*[a-zA-Z])(?=.*[0-9])[\x00-\xff][^:;'",\s]{8,20}$/
 ];
 
-router.get('/getPubKey', function (req, res, next) {
+router.get('/getPubKey', function (req, res) {
     res.json({
         code: 0,
         message: 'ok',
@@ -26,7 +26,7 @@ router.get('/getPubKey', function (req, res, next) {
     res.end();
 });
 
-router.post('/login', function (req, res, next) {
+router.post('/login', function (req, res) {
     const inputCaptcha = req.body.captcha.toLowerCase();
     const email = req.body.email;
     if (!reg[0].test(email)) {
@@ -75,7 +75,7 @@ router.post('/login', function (req, res, next) {
     req.session.captcha = "";
 });
 
-router.post('/register', function (req, res, next) {
+router.post('/register', function (req, res) {
     const inputCaptcha = req.body.captcha.toLowerCase();
     const email = req.body.email;
     if (!reg[0].test(email)) {
@@ -137,7 +137,7 @@ router.post('/register', function (req, res, next) {
     req.session.captcha = "";
 });
 
-router.post('/emailVerify', function (req, res, next) {
+router.post('/emailVerify', function (req, res) {
     const uuid = req.auth.uuid;
     users.findOne({where: {uuid}}).then(function (user) {
         if (user.email_verify) {

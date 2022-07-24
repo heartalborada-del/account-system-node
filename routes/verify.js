@@ -20,7 +20,7 @@ router.use(expressjwt({
     }
 }));
 
-router.get('/email',function (req, res, next){
+router.get('/email',function (req, res){
     let UUID = req.auth.uuid;
     let o = {
         title: siteName,

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const captcha = require('svg-captcha');
 
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
     let c = captcha.create({
         size: 4,
         ignoreChars: '0o0iIl1',
