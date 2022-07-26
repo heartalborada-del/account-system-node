@@ -4,7 +4,8 @@ const path = require("path");
 const mime = require('mime');
 const multiparty = require('multiparty');
 const { promisify } = require('util');
-const sizeOf = promisify(require('image-size'))
+const sizeOf = promisify(require('image-size'));
+const axios = require('axios');
 
 const router = express.Router();
 
@@ -32,7 +33,7 @@ router.post('/upload', function (req, res) {
     let form = new multiparty.Form({
         autoFiles: true,
         uploadDir: path.join(avatarPath,"/tmp"),
-        maxFilesSize: 512*1024,
+        maxFilesSize: 512 * 1024,
         encoding: 'utf-8'
     });
     fs.access(path.join(avatarPath,"/tmp"),function (err){
@@ -47,7 +48,7 @@ router.post('/upload', function (req, res) {
             let acceptType = ['image/png','image/jpg','image/bmp']
             if(acceptType.includes(type)) {
                 sizeOf(newAvatarPath).then(fi => {
-                    if(fi.width === fi.height && fi.height<=512){
+                    if(fi.width === fi.height && fi.height<=1024){
                         fs.readFile(newAvatarPath, (err,data) => {
                             if(err)
                                 return res.json({code: -1,msg: err.message}).end();
@@ -68,7 +69,7 @@ router.post('/upload', function (req, res) {
                                 fs.unlinkSync(files.files[i].path);
                             } catch (e) {}
                         }
-                        return res.json({code: -1,msg: 'The image must be square and the width and height must be less than 512px'}).end();
+                        return res.json({code: -1,msg: 'The image must be square and the width and height must be less than 1024px'}).end();
                     }
                 })
             } else {
@@ -82,5 +83,28 @@ router.post('/upload', function (req, res) {
         })
     })
 });
+
+router.post('/QQavatar',function (req, res) {
+    if(req.query && req.body.id) {
+        axios.get(
+            'https://q.qlogo.cn/g?b=qq&s=5&nk=' + req.body.id,
+            {
+                responseType: 'arraybuffer',
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (X11; U; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4855.98 Safari/537.36',
+                }
+            }
+        ).then((resp) => {
+            if(resp.status === 200) {
+                fs.writeFileSync(path.join(avatarPath, req.auth.uuid), resp.data);
+                res.json({code: 0,msg: 'ok'})
+            } else {
+                res.json({code: -1,msg: 'Cannot get your QQ avatar'})
+            }
+        }).catch((err) => {
+            return res.json({code: -1,msg: err.message}).end();
+        })
+    }
+})
 
 module.exports = router;
