@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const accRouter = require('./api/account');
 const captchaRouter = require('./api/captcha');
+const avatarRouter = require('./api/avatar');
 const {expressjwt} = require('express-jwt');
 const url = require("url");
 const keys = require("../utils/init").keys;
@@ -27,6 +28,8 @@ router.use('/acc', accRouter);
 
 router.use('/captcha', captchaRouter);
 
+router.use('/avatar', avatarRouter);
+
 router.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
         let map = {
@@ -44,4 +47,5 @@ router.use(function (err, req, res, next) {
         next(err);
     }
 })
+
 module.exports = router;

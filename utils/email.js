@@ -1,6 +1,8 @@
 const mail = require('nodemailer');
 const fs = require('fs');
 const path = require("path");
+const {emailVerify} = require('./cache');
+const url = require("url");
 
 const sender = mail.createTransport({
     host: process.env.SMTP_HOST,
@@ -28,11 +30,14 @@ function sendEmail(em, sb, data){
     })
 }
 
-function sendVerifyEmail(em, url){
+function sendVerifyEmail(em, token){
+    let url1 = url.resolve(process.env.SITE_URL, `/verify/email?token=${token}`);
+    emailVerify.set(token,"ok",15 * 60);
     sendEmail(em,
         'Verify your account',
         verifyEmail.replaceAll('{email}', em)
             .replaceAll('{name}', process.env.SITE_NAME)
-            .replaceAll('{url}', url));
+            .replaceAll('{url}', url1));
 }
+
 module.exports = {sendVerifyEmail};

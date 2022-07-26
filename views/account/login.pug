@@ -21,12 +21,13 @@ block content
                         div.input-group-prepend
                             span.input-group-text
                                 i.fa.fa-lock(aria-hidden=true)
-                        input.form-control(
+                        input.form-control.captchaInput(
                             name='captcha', type='text',
                             placeholder='Captcha', required='required',
                             oninput='this.value=this.value.substr(0,4).replace(/[\u4e00-\u9fa5]/,"")'
                         )
                         div.input-group-prepend
-                            img.captcha(src='/api/captcha', height=30)
+                            img.captcha.border-right.rounded-right(src='/api/captcha')
                     button.btn.btn-primary.btn-block(id='doLogin') login
     script(type="text/javascript", src='/js/login.js')
+    script(type="text/javascript", src='/js/captcha.js')

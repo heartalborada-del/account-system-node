@@ -1,10 +1,3 @@
-$('img.captcha')
-    .on('click', function () {
-        let url = this.src.split("?")[0];
-        url += '?' + Math.random()
-        this.src = url;
-    });
-
 $('form.loginForm')
     .on('submit', function () {
         let json = {};//email password captcha

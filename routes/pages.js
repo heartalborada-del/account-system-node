@@ -70,7 +70,9 @@ router.get('/my', function (req, res) {
     }
 })
 
-/*router.get('/test', function (req, res, next){
-
-})*/
+router.use(function (err, req, res, next){
+    if(err){
+        next(err);
+    }
+})
 module.exports = router;
