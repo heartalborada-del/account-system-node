@@ -37,6 +37,10 @@ const users = cp.define('User',
         email_verify: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
+        },
+        permission:{
+            type: DataTypes.TINYINT,
+            defaultValue: 0
         }
     },
     {

@@ -40,4 +40,13 @@ function sendVerifyEmail(em, token){
             .replaceAll('{url}', url1));
 }
 
+function sendRsPWEmail(em, token){
+    let url1 = url.resolve(process.env.SITE_URL, `/verify/email?token=${token}`);
+    emailVerify.set(token,"ok",15 * 60);
+    sendEmail(em,
+        'Reset your account password',
+        verifyEmail.replaceAll('{email}', em)
+            .replaceAll('{name}', process.env.SITE_NAME)
+            .replaceAll('{url}', url1));
+}
 module.exports = {sendVerifyEmail};

@@ -75,14 +75,14 @@ router.post('/login', function (req, res) {
                 }
             });
     } else {
-        res.json({
+        return res.json({
             code: -1,
             msg: 'Validation fails'
         });
     }
     if(!req.session.captcha) {
         captchaCache.take(req.session.captcha);
-        req.session.captcha = "";
+        return req.session.captcha = "";
     }
 });
 
@@ -154,11 +154,10 @@ router.post('/register', function (req, res) {
 
 router.post('/emailVerify', function (req, res) {
     if(!(req.body || req.body.captcha)){
-        res.json({
+        return res.json({
             code: -101,
             msg: 'Invalid params',
         });
-        return;
     }
     const uuid = req.auth.uuid;
     const inputCaptcha = req.body.captcha.toLowerCase();
@@ -208,4 +207,32 @@ router.post('/emailVerify', function (req, res) {
     }
 });
 
+router.post('/resetPassword', function(req, res) {
+    if(!(req.body || req.body.captcha || req.body.email)){
+        return res.json({
+            code: -101,
+            msg: 'Invalid params',
+        });
+    }
+    const inputCaptcha = req.body.captcha.toLowerCase();
+    const email = req.body.email;
+    let p = {"email": email}
+    if (inputCaptcha === req.session.captcha && captchaCache.has(req.session.captcha)) {
+        users.findOne({where: p}).then(function (user) {
+            if(user === null ) {
+                return res.json({
+                    code: -100,
+                    msg: 'Cannot found this user, are you register?',
+                });
+            } else {
+                let token = jwt.genToken({uuid: user.uuid, usage: 'resetPassword'}, '/verify/email/', '15m');
+                mail.sendRsPWEmail(user.email, token);
+                res.json({
+                    code: 0,
+                    msg: 'The reset mail has been sent, please check your mailbox.',
+                });
+            }
+        })
+    }
+})
 module.exports = router;
