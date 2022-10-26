@@ -13,7 +13,7 @@ block content
                             | 的用户
                         p 你的邮箱为
                             code.code #{email}
-                            | 目前邮箱验证状态为
+                        p 目前邮箱验证状态为
                             if verify
                                 code.code Verified
                             else
@@ -44,26 +44,31 @@ block content
         div.mw-full
             div.card.p-0
                 div.px-card.border-bottom.py-10
+                    h2.card-title.font-size-18.m-0 Minecraft
+                div.content
+        div.mw-full
+            div.card.p-0
+                div.px-card.border-bottom.py-10
                     h2.card-title.font-size-18.m-0 Settings
                 div.content
                     h3.card-title.font-size-16.m-0.text-center.border-bottom.pb-10 Avatar
                     div.card.bg-very-dark
                         div.d-flex.flex-wrap(id='content01')
-                            div.custom-file.text-center.alert.alert-primary.m-auto
+                            div.custom-file.text-center.alert.alert-primary.m-auto.wdnmd_d
                                 form.avatarInput(onsubmit='return false')
                                     div.form-group.mb-10
                                         input(type="file", id="picture", required="required", accept='image/png, image/bmp, image/jpg')
                                         label(for="picture") Choose a picture
                                     button.btn.btn-block.btn-primary(id='upload_avatar') 上传头像
-                            div.my-auto.text-center.alert.alert-secondary.m-auto OR
-                            div.text-center.alert.alert-primary.m-auto
+                            div.text-center.alert.alert-secondary.m-auto.wdnmd_d OR
+                            div.text-center.alert.alert-primary.m-auto.wdnmd_d
                                 form.QQavatarInput(onsubmit='return false')
                                     div.form-group
                                         div.input-group
                                             div.input-group-prepend
                                                 span.input-group-text
                                                     i.fa.fa-id-card-o(aria-hidden=true)
-                                                input.form-control.w-150(type="text", name='id', id="QQid", placeholder='Enter you QQ id', required="required")
+                                            input.form-control(type="text", name='id', id="QQid", placeholder='Enter you QQ id', required="required")
                                     button.btn.btn-block.btn-primary(id='upload_QQavatar') 获取QQ头像
                         div.d-flex.flex-wrap.border-top.mt-20
                             div.custom-file.text-center.alert.alert-primary.m-auto.mt-20

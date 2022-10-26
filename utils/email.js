@@ -49,4 +49,4 @@ function sendRsPWEmail(em, token){
             .replaceAll('{name}', process.env.SITE_NAME)
             .replaceAll('{url}', url1));
 }
-module.exports = {sendVerifyEmail};
+module.exports = {sendVerifyEmail,sendRsPWEmail};

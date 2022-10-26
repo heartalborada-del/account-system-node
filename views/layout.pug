@@ -1,6 +1,6 @@
 doctype html
 html
-    hea
+    head
         title= title
         link(rel='stylesheet', href='/css/style.css')
         link(rel='stylesheet', href='https://cdn.bootcdn.net/ajax/libs/Halfmoon/1.1.1/css/halfmoon.css')
@@ -21,7 +21,10 @@ html
                 a.navbar-brand TEST
                 span.navbar-text.text-monospace.badge v0.0.1
                 div.navbar-content.ml-auto
-                    button.btn.btn-action(type="button", onclick='halfmoon.toggleDarkMode()')
+                    button.btn.btn-action.mr-auto(type="button", onclick='window.open("https://github.com/heartalborada-del/account-system-node")')
+                        i.fa.fa-github(aria-hidden=true)
+                        span.sr-only Go to Github
+                    button.btn.btn-action.ml-5(type="button", onclick='halfmoon.toggleDarkMode()')
                         i.fa.fa-moon-o(aria-hidden=true)
                         span.sr-only Toggle dark mode
             div.sidebar
@@ -34,9 +37,18 @@ html
                         i.fa.fa-sign-in
                     | Account
                 div.sidebar-divider
+                div(style='margin: 0.5rem 2.5rem')
                     a.sidebar-link(href='/login') Login
                     a.sidebar-link(href='/register') Register
                     a.sidebar-link(href='/my') My
+                if permission === 1
+                    h5.sidebar-title.sidebar-link-with-icon
+                        span.sidebar-icon
+                            i.fa.fa-sign-in
+                        | Manager
+                    div.sidebar-divider
+                    div(style='margin: 0.5rem 2.5rem')
+                        a.sidebar-link(href='/admin') Manager
             div.content-wrapper
                 div.container-fluid
                     div.content

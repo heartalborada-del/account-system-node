@@ -1,12 +1,13 @@
 const resizeObserver = new ResizeObserver(entries => {
     //回调
     for(let a in entries) {
-        let {width,height} = entries[a].contentRect
+        let {width} = entries[a].contentRect
         let c = $(entries[a].target).children()
-        if(width<465) {
+        if(width<=500) {
             for(let b=0;b<c.length;b++){
                 let d =$(c[b])
-                d.width('100%')
+                console.log(d.id)
+                d.width(width*0.8)
                 d.addClass('mt-20')
             }
         } else {

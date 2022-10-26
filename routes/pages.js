@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const {expressjwt} = require("express-jwt");
 const {keys} = require("../utils/init");
 const {users} = require('../utils/sql');
 const url = require("url");
+const {expressjwt} = require("express-jwt");
 
 const siteName = process.env.SITE_NAME;
 
@@ -20,20 +20,57 @@ router.use(expressjwt({
         }
         return null;
     }
-}).unless({
-    path: ['/', '/login', '/register']
 }));
 
 router.get('/', function (req, res) {
-    res.render('index', {title: siteName});
+    if (req.auth && req.auth.uuid) {
+        users.findOne({where: {UUID: req.auth.uuid}})
+            .then(function (user) {
+                if (user != null) {
+                    res.render('index', {
+                        title: siteName,
+                        permission: user.permission
+                    });
+                    return;
+                }
+            })
+    } else {
+        res.render('index', {title: siteName});
+    }
 });
 
 router.get('/login', function (req, res) {
-    res.render('account/login', {title: siteName});
+    if (req.auth && req.auth.uuid) {
+        users.findOne({where: {UUID: req.auth.uuid}})
+            .then(function (user) {
+                if (user != null) {
+                    res.render('account/login', {
+                        title: siteName,
+                        permission: user.permission
+                    });
+                    return;
+                }
+            })
+    } else {
+        res.render('account/login', {title: siteName});
+    }
 })
 
 router.get('/register', function (req, res) {
-    res.render('account/register', {title: siteName});
+    if (req.auth && req.auth.uuid) {
+        users.findOne({where: {UUID: req.auth.uuid}})
+            .then(function (user) {
+                if (user != null) {
+                    res.render('account/register', {
+                        title: siteName,
+                        permission: user.permission
+                    });
+                    return;
+                }
+            })
+    } else {
+        res.render('account/register', {title: siteName});
+    }
 })
 
 router.get('/my', function (req, res) {
@@ -45,7 +82,8 @@ router.get('/my', function (req, res) {
                         title: siteName,
                         UUID: req.auth.uuid,
                         email: user.email,
-                        verify: user.email_verify
+                        verify: user.email_verify,
+                        permission: user.permission
                     });
                 } else {
                     let option = {
@@ -70,9 +108,4 @@ router.get('/my', function (req, res) {
     }
 })
 
-router.use(function (err, req, res, next){
-    if(err){
-        next(err);
-    }
-})
 module.exports = router;
