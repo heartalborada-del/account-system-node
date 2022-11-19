@@ -139,4 +139,46 @@ router.get('/admin', function (req, res) {
         res.render('jump', option);
     }
 })
+
+router.get('/user/details', function (req, res) {
+    if(req.auth && req.auth.uuid) {
+        users.findOne({where: {UUID: req.auth.uuid}}).then(user => {
+            if (user.permission < 1)
+                return res.render('admin/userDetails', {
+                    title: siteName,
+                    isValid: false
+                });
+            if (req.query && req.query.uuid) {
+                users.findOne({where: {UUID: req.query.uuid}})
+                    .then(function (user) {
+                        if (user != null) {
+                            res.render('admin/userDetails', {
+                                title: siteName,
+                                isValid: true,
+                                UUID: req.query.uuid,
+                                email: user.email,
+                                verify: user.email_verify,
+                                permission: user.permission
+                            });
+                        } else {
+                            res.render('admin/userDetails', {
+                                title: siteName,
+                                isValid: false
+                            });
+                        }
+                    })
+            } else {
+                res.render('admin/userDetails', {
+                    title: siteName,
+                    isValid: false
+                });
+            }
+        });
+    } else {
+        res.render('admin/userDetails', {
+            title: siteName,
+            isValid: false
+        });
+    }
+})
 module.exports = router;

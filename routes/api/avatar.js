@@ -13,7 +13,7 @@ const avatarPath = path.join(__dirname, '../../'+process.env.AVATAR_PATH);
 const defaultPath = path.join(avatarPath, 'default.png');
 
 router.get('/get', function (req, res) {
-    let uuid = req.query.uuid || req.auth.uuid;
+    let uuid = req.query.uuid ? req.query.uuid : req.auth.uuid;
     let avatarPathU = path.join(avatarPath,uuid);
     fs.readFile(avatarPathU, (error, buffer) => {
         if (error) {
@@ -78,7 +78,7 @@ router.post('/upload', function (req, res) {
                         fs.unlinkSync(files.files[i].path);
                     } catch (e) {}
                 }
-                return res.json({code: -1,msg: 'The image suffix must be png/jpg/bmp'}).end();
+                return res.json({code: -1,msg: 'The image suffix must be png/jpg/bmp'});
             }
         })
     })
@@ -97,12 +97,12 @@ router.post('/QQavatar',function (req, res) {
         ).then((resp) => {
             if(resp.status === 200) {
                 fs.writeFileSync(path.join(avatarPath, req.auth.uuid), resp.data);
-                res.json({code: 0,msg: 'ok'})
+                return res.json({code: 0,msg: 'ok'})
             } else {
-                res.json({code: -1,msg: 'Cannot get your QQ avatar'})
+                return res.json({code: -1,msg: 'Cannot get your QQ avatar'})
             }
         }).catch((err) => {
-            return res.json({code: -1,msg: err.message}).end();
+            return res.json({code: -1,msg: err.message});
         })
     }
 })

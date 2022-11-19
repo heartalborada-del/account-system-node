@@ -20,12 +20,11 @@ const reg = [
 ];
 
 router.get('/getPubKey', function (req, res) {
-    res.json({
+    return res.json({
         code: 0,
         message: 'ok',
         key: pubKey
     });
-    res.end();
 });
 
 router.post('/login', function (req, res) {

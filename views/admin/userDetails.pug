@@ -1,0 +1,33 @@
+extends ../layout
+
+block content
+    div.mw-full.mid
+        div.card.p-0
+            div.px-card.py-10.border-bottom.mid
+                if isValid
+                    h1.card-title.font-size-18.m-0 #{UUID}
+                else
+                    h1.card-title.font-size-18.m-0 ERROR ! ! !
+            div.content.form_break
+                if isValid
+                    div.d-flex.flex-wrap
+                        div.alert.alert-success.m-auto
+                            p 该用户UUID为
+                                code.code #{UUID}
+                            p 该用户邮箱为
+                                code.code #{email}
+                            p 该用户邮箱验证状态为
+                                if verify
+                                    code.code Verified
+                                else
+                                    code.code Unverified
+                        div.alert.alert-primary.mt-m892-as.mx-auto.mb-auto
+                            h4.alert-heading.text-center Avatar
+                            img.img-fluid.rounded.h-150.w-150(src="/api/avatar/get?uuid=" + UUID)
+                else
+                    div.alert.alert-danger
+                        h3.alert-heading There are some reasons
+                        p 1. We cannot find this user.  Please check your input uuid is a real uuid
+                        p 2. Please check you have enough permissions
+
+

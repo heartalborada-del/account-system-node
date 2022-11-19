@@ -24,7 +24,7 @@ router.use(expressjwt({
         return null;
     }
 }).unless({
-    path: ['/api/captcha', '/api/acc/login', '/api/acc/getPubKey', '/api/acc/register']
+    path: ['/api/captcha', '/api/acc/login', '/api/acc/getPubKey', '/api/acc/register', '/api/avatar/get']
 }));
 
 router.use('/acc', accRouter);
