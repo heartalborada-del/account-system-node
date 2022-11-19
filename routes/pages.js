@@ -31,7 +31,6 @@ router.get('/', function (req, res) {
                         title: siteName,
                         permission: user.permission
                     });
-                    return;
                 }
             })
     } else {
@@ -48,7 +47,6 @@ router.get('/login', function (req, res) {
                         title: siteName,
                         permission: user.permission
                     });
-                    return;
                 }
             })
     } else {
@@ -65,7 +63,6 @@ router.get('/register', function (req, res) {
                         title: siteName,
                         permission: user.permission
                     });
-                    return;
                 }
             })
     } else {
@@ -108,4 +105,38 @@ router.get('/my', function (req, res) {
     }
 })
 
+router.get('/admin', function (req, res) {
+    if (req.auth && req.auth.uuid) {
+        users.findOne({where: {UUID: req.auth.uuid}})
+            .then(function (user) {
+                if (user != null) {
+                    res.render('admin/root', {
+                        title: siteName,
+                        UUID: req.auth.uuid,
+                        email: user.email,
+                        verify: user.email_verify,
+                        permission: user.permission
+                    });
+                } else {
+                    let option = {
+                        name: 'Login',
+                        url: '/login',
+                        time: 5,
+                        message: 'You aren\'t login or register'
+                    }
+                    res.cookie('ltoken', '', {maxAge: 0})
+                        .cookie('etoken', '', {maxAge: 0})
+                        .render('jump', option);
+                }
+            })
+    } else {
+        let option = {
+            name: 'Login',
+            url: '/login',
+            time: 5,
+            message: 'You aren\'t login or register'
+        }
+        res.render('jump', option);
+    }
+})
 module.exports = router;

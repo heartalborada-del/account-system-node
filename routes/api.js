@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
+
 const accRouter = require('./api/account');
 const captchaRouter = require('./api/captcha');
 const avatarRouter = require('./api/avatar');
+const adminRouter = require('./api/admin');
+
 const {expressjwt} = require('express-jwt');
 const url = require("url");
 const keys = require("../utils/init").keys;
@@ -29,6 +32,8 @@ router.use('/acc', accRouter);
 router.use('/captcha', captchaRouter);
 
 router.use('/avatar', avatarRouter);
+
+router.use('/admin', adminRouter);
 
 router.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {

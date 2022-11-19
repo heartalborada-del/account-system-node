@@ -4,7 +4,6 @@ const {expressjwt} = require("express-jwt");
 const {keys} = require("../utils/init");
 const {emailVerify} = require('../utils/cache');
 const url = require("url");
-const createError = require("http-errors");
 
 const siteName = process.env.SITE_NAME;
 
@@ -20,7 +19,6 @@ router.use(expressjwt({
         return null;
     },
     isRevoked: function (req, token){
-        console.log(emailVerify.has(req.query.token.toString()));
         if (token.payload && token.payload.uuid) {
             return !emailVerify.has(req.query.token.toString());
         }

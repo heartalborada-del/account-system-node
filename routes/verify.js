@@ -21,7 +21,6 @@ router.use(expressjwt({
         return null;
     },
     isRevoked: function (req, token){
-        console.log(emailVerify.has(req.query.token.toString()));
         if (token.payload && token.payload.uuid) {
             return !emailVerify.has(req.query.token.toString());
         }

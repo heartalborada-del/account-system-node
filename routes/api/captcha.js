@@ -15,9 +15,7 @@ router.get('/', function (req, res) {
     })
     req.session.captcha = c.text.toLowerCase();
     cache.set(c.text.toLowerCase(),c.text,30);
-    res.setHeader("content-type", 'image/svg+xml')
-    res.send(c.data);
-    res.end();
+    res.setHeader("content-type", 'image/svg+xml').send(c.data);
 });
 
 module.exports = router;
